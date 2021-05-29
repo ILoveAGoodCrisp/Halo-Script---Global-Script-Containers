@@ -30,7 +30,7 @@
 )
 
 ;// ==================== FUNCTION ====================
-;// b_ai_can_see_player
+;// f_ai_can_see_any_player
 
 ;// returns true if the specified ai can see any player within 90 degrees
 
