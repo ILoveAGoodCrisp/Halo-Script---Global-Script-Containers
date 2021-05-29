@@ -53,3 +53,32 @@
         (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 3) r_angle)
     )
 )
+
+;// ==================== FUNCTION ====================
+;// f_play_sound
+
+;// plays the specified sound impulse on the specified object and sleeps for the sound impulse time + the stated ticks (ticks can be negative)
+
+(script static void f_play_sound (sound audio, object obj_object, short ticks)
+    (sound_impulse_start audio obj_object 1)
+    (sleep (+ (sound_impulse_time audio) ticks))
+)
+
+;// plays the specified sound impulse and sleeps for the sound impulse time + the stated ticks (ticks can be negative)
+
+(script static void f_play_sound (sound audio, short ticks)
+    (sound_impulse_start audio none 1)
+    (sleep (+ (sound_impulse_time audio)  ticks))
+)
+
+;// plays the specified sound impulse on the specified object
+
+(script static void f_play_sound (sound audio, object obj_object)
+    (sound_impulse_start audio obj_object 1)
+)
+
+;// plays the specified sound impulse
+
+(script static void f_play_sound (sound audio)
+    (sound_impulse_start audio none 1)
+)
