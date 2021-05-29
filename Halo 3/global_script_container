@@ -28,3 +28,28 @@
         (sleep_until (!= (object_get_health obj_object) -1.0) 1))
     (object_set_scale obj_object scale time)
 )
+
+;// ==================== FUNCTION ====================
+;// b_ai_can_see_player
+
+;// returns true if the specified ai can see any player within 90 degrees
+
+(script static boolean f_ai_can_see_any_player (ai ai_actor)
+    (or
+        (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 0) 90)
+        (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 1) 90)
+        (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 2) 90)
+        (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 3) 90)
+    )
+)
+
+;// returns true if the specified ai can see any player within the specified angle
+
+(script static boolean f_ai_can_see_any_player (ai ai_actor, real r_angle)
+    (or
+        (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 0) r_angle)
+        (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 1) r_angle)
+        (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 2) r_angle)
+        (objects_can_see_object (ai_get_object ai_actor) (list_get (players) 3) r_angle)
+    )
+)
