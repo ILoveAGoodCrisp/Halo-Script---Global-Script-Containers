@@ -1,17 +1,17 @@
-;// ==================================================
-;// ==================== GLOBALS =====================
-;// ==================================================
+; ==================================================
+; ==================== GLOBALS =====================
+; ==================================================
 
+(global boolean debug false)
 
+; ==================================================
+; ==================== SCRIPTS =====================
+; ==================================================
 
-;// ==================================================
-;// ==================== SCRIPTS =====================
-;// ==================================================
+; ==================== FUNCTION ====================
+; f_object_create_with_scale 
 
-;// ==================== FUNCTION ====================
-;// f_object_create_with_scale 
-
-;// creates an object and sets its scale immediately
+; creates an object and sets its scale immediately
 
 (script static void f_object_create_with_scale (object_name obj_object, real scale)
     (object_create_anew obj_object)
@@ -20,7 +20,7 @@
     (object_set_scale obj_object scale 0)
 )
 
-;// creates an object and sets its scale over x ticks
+; creates an object and sets its scale over x ticks
 
 (script static void f_object_create_with_scale (object_name obj_object, real scale, short time)
     (object_create_anew obj_object)
@@ -29,10 +29,10 @@
     (object_set_scale obj_object scale time)
 )
 
-;// ==================== FUNCTION ====================
-;// f_ai_can_see_any_player
+; ==================== FUNCTION ====================
+; f_ai_can_see_any_player
 
-;// returns true if the specified ai can see any player within 90 degrees
+; returns true if the specified ai can see any player within 90 degrees
 
 (script static boolean f_ai_can_see_any_player (ai ai_actor)
     (or
@@ -43,7 +43,7 @@
     )
 )
 
-;// returns true if the specified ai can see any player within the specified angle
+; returns true if the specified ai can see any player within the specified angle
 
 (script static boolean f_ai_can_see_any_player (ai ai_actor, real r_angle)
     (or
@@ -54,31 +54,78 @@
     )
 )
 
-;// ==================== FUNCTION ====================
-;// f_play_sound
+; ==================== FUNCTION ====================
+; f_play_sound
 
-;// plays the specified sound impulse on the specified object and sleeps for the sound impulse time + the stated ticks (ticks can be negative)
+; plays the specified sound impulse on the specified object and sleeps for the sound impulse time + the stated ticks (ticks can be negative)
 
-(script static void f_play_sound (sound audio, object obj_object, short ticks)
-    (sound_impulse_start audio obj_object 1)
-    (sleep (+ (sound_impulse_time audio) ticks))
+(script static void f_play_sound (sound snd_audio, object obj_object, short s_ticks)
+    (sound_impulse_start snd_audio obj_object 1)
+    (sleep (+ (sound_impulse_time snd_audio) s_ticks))
 )
 
-;// plays the specified sound impulse and sleeps for the sound impulse time + the stated ticks (ticks can be negative)
+; plays the specified sound impulse and sleeps for the sound impulse time + the stated ticks (ticks can be negative)
 
-(script static void f_play_sound (sound audio, short ticks)
-    (sound_impulse_start audio none 1)
-    (sleep (+ (sound_impulse_time audio)  ticks))
+(script static void f_play_sound (sound snd_audio, short s_ticks)
+    (sound_impulse_start snd_audio none 1)
+    (sleep (+ (sound_impulse_time snd_audio)  s_ticks))
 )
 
-;// plays the specified sound impulse on the specified object
+; plays the specified sound impulse on the specified object
 
-(script static void f_play_sound (sound audio, object obj_object)
-    (sound_impulse_start audio obj_object 1)
+(script static void f_play_sound (sound snd_audio, object obj_object)
+    (sound_impulse_start snd_audio obj_object 1)
 )
 
-;// plays the specified sound impulse
+; plays the specified sound impulse
 
-(script static void f_play_sound (sound audio)
-    (sound_impulse_start audio none 1)
+(script static void f_play_sound (sound snd_audio)
+    (sound_impulse_start snd_audio none 1)
 )
+
+;==================== FUNCTION ====================
+; dsave
+
+; if the debug global is set to true, the game will immediately save when the scoreboard button is pressed. Change the action being tested in both dsave and dsave_action_test_reset if the scoreboard button is already in use
+
+(script startup void dsave
+    (if debug
+        (sleep_until
+            (begin
+                (if (player_action_test_back)
+                    (begin
+                        (game_save_immediate)
+                        (sleep_until (not (game_saving)) 1)
+                        (dsave_action_test_reset)
+                    )
+                )
+                false
+            )
+        1)
+    )
+)
+
+; ==================== FUNCTION ====================
+; dsave_action_test_reset
+
+; used by dsave to ensure that player_action_test_back will return false before checking for input again
+
+(script static void dsave_action_test_reset
+    (sleep_until
+        (begin
+            (player_action_test_reset)
+            (not (player_action_test_back))
+        )
+    1)
+)
+
+; ==================== FUNCTION ====================
+; dprint
+
+; a pipedream until such a time that the print function can be restored. For now it can be used to retain useful information in the hsc post compilation.
+
+    (script static void dprint (string string_text)
+        (if debug
+            (print string_text)
+        )
+    )
